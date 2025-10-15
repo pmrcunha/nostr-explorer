@@ -1,11 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { APITester } from './APITester';
 import './index.css';
+import { Effect } from 'effect';
 
 import logo from './logo.svg';
 import reactLogo from './react.svg';
+import { useCallback, useMemo, useState } from 'react';
 
 export function App() {
+  const [count, setCount] = useState(0);
+
+  const task = useMemo(() => Effect.sync(() => setCount((current) => current + 1)), [setCount]);
+
+  const increment = useCallback(() => Effect.runSync(task), [task]);
+
   return (
     <div className="container mx-auto p-8 text-center relative z-10">
       <div className="flex justify-center items-center gap-8 mb-8">
@@ -23,6 +31,7 @@ export function App() {
           <APITester />
         </CardContent>
       </Card>
+      <button onClick={increment}>count is {count}</button>
     </div>
   );
 }
