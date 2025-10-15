@@ -1,7 +1,23 @@
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Input } from '../ui/input'
-import { useCallback } from 'react'
+import { useCallback, useState, type ChangeEvent } from 'react'
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "@/components/ui/resizable"
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Button } from '../ui/button'
+import { Code, Eye } from 'lucide-react'
+import type { Event } from '@/lib/nostr/types'
 
 function LeftPanel() {
     return <div>
@@ -28,62 +44,53 @@ function LeftPanel() {
     </div>
 }
 
-function SearchInput() {
-    const handleSearch = useCallback((e: React.ChangeEvent) => {
-        fetch('http://localhost:7700/indexes/events/search', {
-            method: 'POST',
-            body: JSON.stringify({
-                q: e.target.value
-            }),
-            headers: {
-                Authorization: `Bearer meilisearch_token`,
-                "Content-Type": "application/json"
-            }
-        })
-    }, [])
-    return <Input onChange={handleSearch} />
+
+type SearchInputProps = {
+    onSearch: (e: ChangeEvent<HTMLInputElement>) => void
+}
+function SearchInput({ onSearch }: SearchInputProps) {
+
+    return <Input onChange={onSearch} />
 }
 
 function SortSelect() {
     return <span><Label>Sort</Label></span>
 }
 
-function Main() {
-    return <div>
+type MainProps = {
+    onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+    results: Event[];
+}
+
+function Main({ onSearch, results }: MainProps) {
+    const [view, setView] = useState<'raw' | 'preview'>('raw')
+    return <div className="h-[85vh] overflow-y-scroll">
         <div>
-            <SearchInput />
+            <SearchInput onSearch={onSearch} />
             <SortSelect />
         </div>
-        <div>
-            {Array.from({ length: 15 }).fill(null).map((_, i) => {
-                return <div key={i}>
-                    <span>1</span>
-                    <pre>
-                        {`
-{
-    "kind": 1,
-    "id": "6bcf541ec8e8a3d734906a6fa5ac97c15bc4aded367b7f598cab6d3bf13fb422",
-    "pubkey": "b299876ba85e33da57269247f7f91aee025f5bd2bc229aa85c7908f37c10c838",
-    "created_at": 1681168055,
-    "tags": [
-      [
-        "client",
-        "coracle"
-      ]
-    ],
-    "content": "Still fighting connection issues, but excited about Nostr!",
-    "sig": "e12e35319525d1a99d1e9830c5087ad3493ad631db82ea2a55edff9146b8e2a7288697c0a12ff96617c940f2696417542aa2284149ced7238c2fafa2f4e37ec3"
-  }
-`}
-                    </pre>
-                </div>
+        <div className="flex flex-col gap-3 p-3">
+            {results.map((result, i) => {
+                return <Card key={i} className="w-full">
+                    <CardHeader>
+                        <CardTitle>Kind 1</CardTitle>
+                        <CardDescription>Text Note</CardDescription>
+                        <CardAction className="flex gap-2">
+                            <Button onClick={() => setView('preview')} size="icon" variant="outline"><Eye /></Button>
+                            <Button onClick={() => setView('raw')} size="icon" variant="outline"><Code /></Button>
+                        </CardAction>
+                    </CardHeader>
+                    <CardContent>
+                        {view === 'raw' ? <pre className="text-wrap overflow-x-scroll">{JSON.stringify(result, null, 2)}</pre> : <div>{result.content}</div>}
+                    </CardContent>
+                </Card>
             })}
         </div>
     </div>
 }
 
 function RightPanel() {
-    return <div className="flex flex-col items-center gap-3">
+    return <div className="">
         <h3>Relays</h3>
         <div className="flex items-center gap-3">
             <Checkbox id="damus" />
@@ -103,9 +110,44 @@ function RightPanel() {
 }
 
 export function ExplorePage() {
-    return <>
-        <LeftPanel />
-        <Main />
-        <RightPanel />
-    </>
+    const [events, setEvents] = useState([])
+    const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        fetch('http://localhost:7700/indexes/events/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                q: e.currentTarget.value
+            }),
+            headers: {
+                Authorization: `Bearer 83e829e576b979e007e7e12487bd3cc18eece56ba0f09a00550ccfd420298173`,
+                "Content-Type": "application/json"
+            }
+        }).then(rsp => rsp.json()).then(json => {
+            console.log(json);
+            setEvents(json.hits)
+        })
+    }, [])
+    return <ResizablePanelGroup
+        direction="horizontal"
+        className="rounded-lg border md:min-w-[450px]"
+    >
+        <ResizablePanel defaultSize={20}>
+            <div className="p-6">
+                <span className="font-semibold"><LeftPanel /></span>
+            </div>
+        </ResizablePanel>
+        <ResizableHandle />
+        <ResizablePanel defaultSize={60}>
+            <div className="p-6">
+                <span className="font-semibold"><Main results={events} onSearch={handleSearch} /></span>
+            </div>
+        </ResizablePanel>
+        <ResizableHandle />
+        <ResizablePanel defaultSize={20}>
+            <div className=" p-6">
+                <span className="font-semibold"><RightPanel /></span>
+            </div>
+        </ResizablePanel>
+    </ResizablePanelGroup>
 }
+
+
