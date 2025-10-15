@@ -6,29 +6,35 @@ const server = serve({
     // Serve index.html for all unmatched routes.
     "/*": index,
 
-    "/api/hello": {
-      async GET(req) {
-        void req;
-        return Response.json({
-          message: "Hello, world!",
-          method: "GET",
-        });
-      },
-      async PUT(req) {
-        void req;
-        return Response.json({
-          message: "Hello, world!",
-          method: "PUT",
-        });
-      },
-    },
+    "/api/search/:q": async (req) => {
+      const query = req.params.q;
 
-    "/api/hello/:name": async (req) => {
-      const name = req.params.name;
+      const response = await fetch("http://localhost:7700");
+      const json = await response.json()
+      console.log(json)
+
       return Response.json({
-        message: `Hello, ${name}!`,
+        description: "Query Meilisearch. Filters adjust the query.",
+        method: "GET",
+        search_term: query
       });
     },
+    "/api/queries": {
+      async POST() {
+        return Response.json({
+          description: "Sets the queries that the cron job should run, and the schedule. Will have all CRUD operations",
+          method: "POST",
+        });
+      },
+    },
+    "/api/relays": {
+      async PUT() {
+        return Response.json({
+          description: "Update the list of relays to query",
+          method: "PUT",
+        });
+      }
+    }
   },
 
   development: process.env.NODE_ENV !== "production" && {
