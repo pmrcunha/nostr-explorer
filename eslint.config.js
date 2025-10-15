@@ -1,72 +1,26 @@
-import pluginJs from '@eslint/js';
-import prettier from 'eslint-plugin-prettier';
-import securityPlugin from 'eslint-plugin-security';
-import unicornPlugin from 'eslint-plugin-unicorn';
-import globals from 'globals';
-import tsPlugin from 'typescript-eslint';
-import erasableSyntax from 'eslint-plugin-erasable-syntax-only';
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import pluginReact from "eslint-plugin-react";
+import { defineConfig } from "eslint/config";
+// Built in to Typescript 5.8, but not in Bun yet
+import erasableSyntax from "eslint-plugin-erasable-syntax-only";
+import security from "eslint-plugin-security";
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  // Security
-  securityPlugin.configs.recommended,
+export default defineConfig([
   {
-    files: ['src/**/*.ts'],
+    name: "base",
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: { globals: globals.browser },
   },
+  tseslint.configs.recommended,
+  pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat["jsx-runtime"],
   {
-    languageOptions: { globals: { ...globals.browser, ...globals.node } },
-  },
-  {
-    rules: {
-      'func-style': ['warn', 'expression'],
-      'no-restricted-syntax': ['off', 'ForOfStatement'],
-      'no-console': ['error'],
-      'prefer-template': 'error',
-    },
-  },
-  // TypeScript Eslint
-  ...tsPlugin.configs.recommended,
-  {
-    name: 'typescript-eslint-overwrites',
-    rules: {
-      '@typescript-eslint/explicit-function-return-type': 'warn',
-      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
-    },
-  },
-  {
-    name: 'erasable-syntax',
+    name: "erasable-syntax",
     ...erasableSyntax.configs.recommended,
   },
-  // Prettier
-  {
-    name: 'prettier',
-    plugins: {
-      prettier,
-    },
-    rules: {
-      'prettier/prettier': [
-        1,
-        {
-          endOfLine: 'lf',
-          printWidth: 180,
-          semi: true,
-          singleQuote: true,
-          tabWidth: 2,
-          trailingComma: 'es5',
-        },
-      ],
-    },
-  },
-  // Unicorn
-  {
-    name: 'unicorn',
-    plugins: {
-      unicorn: unicornPlugin,
-    },
-    rules: {
-      'unicorn/empty-brace-spaces': 'off',
-      'unicorn/no-null': 'off',
-    },
-  },
-  pluginJs.configs.recommended,
-];
+  security.configs.recommended,
+]);
