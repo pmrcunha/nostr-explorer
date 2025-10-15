@@ -1,6 +1,8 @@
 services:
   meili:
     image: getmeili/meilisearch:v1.16
+    environment:
+      MEILI_MASTER_KEY: 'REPLACE_ME'
     ports:
       - 7700:7700
     restart: unless-stopped
