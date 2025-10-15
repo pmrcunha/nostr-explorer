@@ -7,7 +7,7 @@
     "dev": "bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun src/index.tsx",
     "build": "bun run build.ts",
-    "lint": "eslint",
+    "lint": "eslint src",
     "format": "prettier . --write"
   },
   "dependencies": {

@@ -4,16 +4,17 @@ import securityPlugin from 'eslint-plugin-security';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tsPlugin from 'typescript-eslint';
+import erasableSyntax from 'eslint-plugin-erasable-syntax-only';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   // Security
   securityPlugin.configs.recommended,
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
   },
   {
-    languageOptions: { globals: globals.node },
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
   {
     rules: {
@@ -21,18 +22,24 @@ export default [
       'no-restricted-syntax': ['off', 'ForOfStatement'],
       'no-console': ['error'],
       'prefer-template': 'error',
-      quotes: ['error', 'single', { avoidEscape: true }],
     },
   },
   // TypeScript Eslint
+  ...tsPlugin.configs.recommended,
   {
+    name: 'typescript-eslint-overwrites',
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'warn',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
   },
+  {
+    name: 'erasable-syntax',
+    ...erasableSyntax.configs.recommended,
+  },
   // Prettier
   {
+    name: 'prettier',
     plugins: {
       prettier,
     },
@@ -52,6 +59,7 @@ export default [
   },
   // Unicorn
   {
+    name: 'unicorn',
     plugins: {
       unicorn: unicornPlugin,
     },
@@ -61,5 +69,4 @@ export default [
     },
   },
   pluginJs.configs.recommended,
-  ...tsPlugin.configs.recommended,
 ];
