@@ -12,6 +12,9 @@ import { Effect } from "effect";
 import logo from "./logo.svg";
 import reactLogo from "./react.svg";
 import { useCallback, useMemo, useState } from "react";
+import { ExplorePage } from "./components/pages/explore";
+import { QueriesPage } from "./components/pages/queries";
+import { RelaysPage } from "./components/pages/relays";
 
 export function App() {
   const [count, setCount] = useState(0);
@@ -53,6 +56,10 @@ export function App() {
         </CardContent>
       </Card>
       <button onClick={increment}>count is {count}</button>
+
+      <ExplorePage />
+      <QueriesPage />
+      <RelaysPage />
     </div>
   );
 }
