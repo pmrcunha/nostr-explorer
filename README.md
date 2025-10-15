@@ -36,3 +36,9 @@ curl \
   -H 'Authorization: Bearer aSampleMasterKey' \
   --data-binary @kind1.json
 ```
+
+*Get API Keys for Meilisearch*
+```
+curl -X GET 'http://localhost:7700/keys' \
+-H 'Authorization: Bearer MASTER_KEY'
+```
