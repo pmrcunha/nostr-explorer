@@ -1,6 +1,36 @@
 import { serve } from "bun";
 import index from "./index.html";
 
+import {
+  Schedule,
+  Cron,
+  DateTime,
+  Console
+} from "effect"
+import { log } from "./lib/utils";
+
+// every 10 seconds
+const cron = Cron.make({
+  seconds: [5, 10, 15, 30, 35, 45, 55], // Trigger at the start of a minute
+  minutes: [], // Trigger at the start of an hour
+  hours: [], // Trigger at 4:00 AM
+  days: [], // Specific days of the month
+  months: [], // No restrictions on the month
+  weekdays: [], // No restrictions on the weekday
+  tz: DateTime.zoneUnsafeMakeNamed("Europe/Copenhagen") // Optional time zone
+})
+
+// const nextDate = Cron.sequence(cron, new Date())
+
+// console.log(nextDate.next().value)
+
+
+const schedule = Schedule.cron(cron);
+
+
+const action = Console.log('Here we are again')
+log(action, schedule);
+
 const server = serve({
   routes: {
     // Serve index.html for all unmatched routes.
