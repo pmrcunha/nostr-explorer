@@ -27,6 +27,8 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty"
+import { useQuery } from '@tanstack/react-query'
+import { searchEvents } from '@/api/meilisearch/api'
 
 function EmptyDemo() {
     return (
@@ -110,7 +112,7 @@ type MainProps = {
 
 function Main({ onSearch, results }: MainProps) {
     const [view, setView] = useState<'raw' | 'preview'>('preview')
-    return <div className="h-[90vh] overflow-y-scroll">
+    return <div className="h-[80vh] overflow-y-scroll">
         <div>
             <SearchInput onSearch={onSearch} />
             <SortSelect />
@@ -156,25 +158,14 @@ function RightPanel() {
 }
 
 export function ExplorePage() {
-    const [events, setEvents] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
+    const searchQuery = useQuery({ queryKey: ['search-events', searchTerm], queryFn: ({ queryKey }) => searchEvents(queryKey[1] ?? '') })
     const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        fetch('http://localhost:7700/indexes/events/search', {
-            method: 'POST',
-            body: JSON.stringify({
-                q: e.currentTarget.value
-            }),
-            headers: {
-                Authorization: `Bearer 83e829e576b979e007e7e12487bd3cc18eece56ba0f09a00550ccfd420298173`,
-                "Content-Type": "application/json"
-            }
-        }).then(rsp => rsp.json()).then(json => {
-            console.log(json);
-            setEvents(json.hits)
-        })
+        setSearchTerm(e.target.value)
     }, [])
     return <ResizablePanelGroup
         direction="horizontal"
-        className="rounded-lg border md:min-w-[450px]"
+        className="m-8 p-3 rounded-lg border md:min-w-[450px]"
     >
         <ResizablePanel defaultSize={20}>
             <LeftPanel />
@@ -182,7 +173,7 @@ export function ExplorePage() {
         <ResizableHandle />
         <ResizablePanel defaultSize={60}>
             <div className="p-6">
-                <span className="font-semibold"><Main results={events} onSearch={handleSearch} /></span>
+                <span className="font-semibold"><Main results={searchQuery.data ?? []} onSearch={handleSearch} /></span>
             </div>
         </ResizablePanel>
         <ResizableHandle />

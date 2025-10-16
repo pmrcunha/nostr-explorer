@@ -20,7 +20,8 @@
 
 ## Frontend
 - [ ] Setup frontend and scaffold the UI
-- [ ] Setup API Client using Tanstack Query and Zod
+- [x] Setup API Client using Tanstack Query 
+- [ ] Setup Zod to validate API payloads and responses
 - [ ] Setup CRUD operations for relays
 - [ ] Setup CRUD operations for queries
 - [ ] Make filter as you type search box with inline filters
