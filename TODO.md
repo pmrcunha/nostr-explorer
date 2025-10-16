@@ -19,9 +19,11 @@
 - [ ] Make function to fetch npub metadata
 
 ## Frontend
-- [ ] Setup frontend and scaffold the UI
+- [x] Setup frontend and scaffold the UI
 - [x] Setup API Client using Tanstack Query 
-- [ ] Setup Zod to validate API payloads and responses
+- [x] Setup Zod to validate API payloads and responses
+- [ ] Scaffold the queries page
+- [ ] Scaffold the relays page
 - [ ] Setup CRUD operations for relays
 - [ ] Setup CRUD operations for queries
 - [ ] Make filter as you type search box with inline filters
@@ -34,5 +36,5 @@
 - [x] Fetch data from Meilisearch in the UI client
 - [ ] Turn left panel into a fixed sidebar
 - [ ] Add settings button at the bottom of the sidebar
-- [ ] Convert from Bun to Vite, vitest, pnpm
+- [x] Convert from Bun to Vite, vitest, pnpm
 
