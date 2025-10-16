@@ -1,10 +1,18 @@
 import { serve } from "bun";
 import index from "./index.html";
-import { Cron } from 'croner'
+import { Cron, scheduledJobs } from 'croner'
 
-new Cron('*/5 * * * * *', { timezone: 'Europe/Copenhagen' }, () => {
+const job = new Cron('*/5 * * * * *', { name: 'log-five-seconds', timezone: 'Europe/Copenhagen' }, () => {
   console.log('This will run every fifth second');
 });
+
+console.log(`Cron job ${job.name}: ${job.isRunning() ? 'running' : 'not running'}`)
+
+new Cron('@hourly', { name: 'every-hour' }, () => {
+  console.log('Wow this server lasted one more hour!')
+})
+
+console.log(scheduledJobs.map(job => job.name))
 
 const server = serve({
   routes: {
