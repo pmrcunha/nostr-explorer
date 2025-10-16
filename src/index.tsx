@@ -2,7 +2,7 @@ import { serve } from "bun";
 import index from "./index.html";
 import { Cron } from 'croner'
 
-new Cron('*/5 * * * * *', () => {
+new Cron('*/5 * * * * *', { timezone: 'Europe/Copenhagen' }, () => {
   console.log('This will run every fifth second');
 });
 
