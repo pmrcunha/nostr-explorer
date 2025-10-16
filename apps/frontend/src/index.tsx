@@ -1,18 +1,24 @@
 import { serve } from "bun";
 import index from "./index.html";
-import { Cron, scheduledJobs } from 'croner'
+import { Cron, scheduledJobs } from "croner";
 
-const job = new Cron('*/5 * * * * *', { name: 'log-five-seconds', timezone: 'Europe/Copenhagen' }, () => {
-  console.log('This will run every fifth second');
+const job = new Cron(
+  "*/5 * * * * *",
+  { name: "log-five-seconds", timezone: "Europe/Copenhagen" },
+  () => {
+    console.log("This will run every fifth second");
+  },
+);
+
+console.log(
+  `Cron job ${job.name}: ${job.isRunning() ? "running" : "not running"}`,
+);
+
+new Cron("@hourly", { name: "every-hour" }, () => {
+  console.log("Wow this server lasted one more hour!");
 });
 
-console.log(`Cron job ${job.name}: ${job.isRunning() ? 'running' : 'not running'}`)
-
-new Cron('@hourly', { name: 'every-hour' }, () => {
-  console.log('Wow this server lasted one more hour!')
-})
-
-console.log(scheduledJobs.map(job => job.name))
+console.log(scheduledJobs.map((job) => job.name));
 
 const server = serve({
   routes: {
@@ -23,19 +29,20 @@ const server = serve({
       const query = req.params.q;
 
       const response = await fetch("http://localhost:7700");
-      const json = await response.json()
-      console.log(json)
+      const json = await response.json();
+      console.log(json);
 
       return Response.json({
         description: "Query Meilisearch. Filters adjust the query.",
         method: "GET",
-        search_term: query
+        search_term: query,
       });
     },
     "/api/queries": {
       async POST() {
         return Response.json({
-          description: "Sets the queries that the cron job should run, and the schedule. Will have all CRUD operations",
+          description:
+            "Sets the queries that the cron job should run, and the schedule. Will have all CRUD operations",
           method: "POST",
         });
       },
@@ -46,8 +53,8 @@ const server = serve({
           description: "Update the list of relays to query",
           method: "PUT",
         });
-      }
-    }
+      },
+    },
   },
 
   development: process.env.NODE_ENV !== "production" && {
