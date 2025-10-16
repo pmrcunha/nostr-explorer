@@ -1,0 +1,15 @@
+{
+  "name": "nostr-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "dev": "turbo dev"
+  },
+  "author": "Paulo Cunha",
+  "license": "ISC",
+  "packageManager": "pnpm@10.18.3",
+  "devDependencies": {
+    "turbo": "^2.5.8"
+  }
+}

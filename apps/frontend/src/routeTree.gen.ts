@@ -8,80 +8,80 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as RelaysRouteImport } from "./routes/relays";
-import { Route as QueriesRouteImport } from "./routes/queries";
-import { Route as IndexRouteImport } from "./routes/index";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as RelaysRouteImport } from './routes/relays'
+import { Route as QueriesRouteImport } from './routes/queries'
+import { Route as IndexRouteImport } from './routes/index'
 
 const RelaysRoute = RelaysRouteImport.update({
-  id: "/relays",
-  path: "/relays",
+  id: '/relays',
+  path: '/relays',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const QueriesRoute = QueriesRouteImport.update({
-  id: "/queries",
-  path: "/queries",
+  id: '/queries',
+  path: '/queries',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/queries": typeof QueriesRoute;
-  "/relays": typeof RelaysRoute;
+  '/': typeof IndexRoute
+  '/queries': typeof QueriesRoute
+  '/relays': typeof RelaysRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/queries": typeof QueriesRoute;
-  "/relays": typeof RelaysRoute;
+  '/': typeof IndexRoute
+  '/queries': typeof QueriesRoute
+  '/relays': typeof RelaysRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/queries": typeof QueriesRoute;
-  "/relays": typeof RelaysRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/queries': typeof QueriesRoute
+  '/relays': typeof RelaysRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/queries" | "/relays";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/queries" | "/relays";
-  id: "__root__" | "/" | "/queries" | "/relays";
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/queries' | '/relays'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/queries' | '/relays'
+  id: '__root__' | '/' | '/queries' | '/relays'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  QueriesRoute: typeof QueriesRoute;
-  RelaysRoute: typeof RelaysRoute;
+  IndexRoute: typeof IndexRoute
+  QueriesRoute: typeof QueriesRoute
+  RelaysRoute: typeof RelaysRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/relays": {
-      id: "/relays";
-      path: "/relays";
-      fullPath: "/relays";
-      preLoaderRoute: typeof RelaysRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/queries": {
-      id: "/queries";
-      path: "/queries";
-      fullPath: "/queries";
-      preLoaderRoute: typeof QueriesRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+    '/relays': {
+      id: '/relays'
+      path: '/relays'
+      fullPath: '/relays'
+      preLoaderRoute: typeof RelaysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/queries': {
+      id: '/queries'
+      path: '/queries'
+      fullPath: '/queries'
+      preLoaderRoute: typeof QueriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,7 +89,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   QueriesRoute: QueriesRoute,
   RelaysRoute: RelaysRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
