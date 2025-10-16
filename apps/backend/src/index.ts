@@ -1,14 +1,9 @@
 import { Hono } from "hono";
 import { openAPIRouteHandler } from "hono-openapi";
 import queries from "./app/queries";
-import relays from "./app/relays";
 import { Cron, scheduledJobs } from "croner";
 import { logger } from "hono/logger";
 import { Scalar } from "@scalar/hono-api-reference";
-
-import { convertNpub } from "@pmrcunha/nostr";
-
-console.log(convertNpub("bum"));
 
 const app = new Hono();
 app.use(logger());
@@ -24,7 +19,8 @@ console.log(
   `Cron job ${job.name}: ${job.isRunning() ? "running" : "not running"}`,
 );
 
-console.log(`Registered Cron jobs: ${scheduledJobs.map((job) => job.name)}`);
+const activeJobs = scheduledJobs.map((job: Cron) => job.name);
+console.log(`Registered Cron jobs: ${activeJobs}`);
 
 const openapiSpec = openAPIRouteHandler(app, {
   documentation: {
@@ -62,6 +58,5 @@ app.get("/", (c) => {
 });
 
 app.route("queries", queries);
-app.route("relays", relays);
 
 export default app;
