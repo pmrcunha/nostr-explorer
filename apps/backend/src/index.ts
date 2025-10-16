@@ -1,7 +1,8 @@
+import { Hono } from "hono";
+import { openAPIRouteHandler } from "hono-openapi";
 import queries from "./app/queries";
 import relays from "./app/relays";
 import { Cron, scheduledJobs } from "croner";
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { logger } from "hono/logger";
 import { Scalar } from "@scalar/hono-api-reference";
 
@@ -9,7 +10,7 @@ import { convertNpub } from "@pmrcunha/nostr";
 
 console.log(convertNpub("bum"));
 
-const app = new OpenAPIHono();
+const app = new Hono();
 app.use(logger());
 
 const job = new Cron(
@@ -25,15 +26,36 @@ console.log(
 
 console.log(`Registered Cron jobs: ${scheduledJobs.map((job) => job.name)}`);
 
-app.doc("/doc", {
-  openapi: "3.1.0",
-  info: {
-    version: "1.0.0",
-    title: "My API",
+const openapiSpec = openAPIRouteHandler(app, {
+  documentation: {
+    info: {
+      title: "Nostr Explorer API",
+      version: "1.0.0",
+      description: `Documentation of the API`,
+    },
+    tags: [
+      {
+        name: "Queries",
+        description: "Endpoints related to queries.",
+      },
+    ],
+    servers: [
+      {
+        url: "http://localhost:3000",
+        description: "Local server",
+      },
+    ],
   },
 });
-
-app.get("/scalar", Scalar({ url: "/doc" }));
+app.get("/openapi", openapiSpec);
+app.get(
+  "/docs",
+  Scalar({
+    url: "/openapi",
+    pageTitle: "Nostr Explorer API",
+    theme: "default",
+  }),
+);
 
 app.get("/", (c) => {
   return c.text("Hello Hono!");
