@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { kindDescriptions } from "@pmrcunha/nostr"
 import { Input } from "../ui/input";
 import { useCallback, useState, type ChangeEvent } from "react";
 import {
@@ -86,41 +87,13 @@ function EmptyDemo() {
 }
 
 function LeftPanel() {
-  const kinds = [
-    {
-      kind: 1,
-      label: "Text Note",
-      description: "A text note",
-      nipUrl: "https://github.com/nostr-protocol/nips/blob/master/10.md",
-    },
-    {
-      kind: 3,
-      label: "Follows List",
-      description: "List of pubkeys the user follows",
-    },
-    {
-      kind: 5,
-      label: "Delete Request",
-      description: "A request to delete one or more events",
-    },
-    {
-      kind: 7,
-      label: "Reaction",
-      description: "An emoji reaction to an event",
-    },
-    {
-      kind: 64,
-      label: "Chess PGN",
-      nipUrl: "https://github.com/nostr-protocol/nips/blob/master/64.md",
-    },
-  ];
   return (
     <div className="flex flex-col justify-between h-full">
       <div>
         <h2>Nostr Explorer</h2>
         <h3>Kinds</h3>
         <div className="flex w-full max-w-lg flex-col gap-3">
-          {kinds.map((kind) => {
+          {kindDescriptions.map((kind) => {
             return (
               <Item key={kind.kind} className="flex items-center group">
                 <ItemMedia>
