@@ -1,9 +1,13 @@
-export interface Event {
-  kind: number;
-  tags: string[][];
-  content: string;
-  created_at: number;
-  pubkey: string;
-  id: string;
-  sig: string;
-}
+import { z } from "zod";
+
+export const NostrEventSchema = z.object({
+  id: z.string(),
+  kind: z.number(),
+  pubkey: z.string(),
+  created_at: z.number(),
+  tags: z.array(z.array(z.string())),
+  content: z.string(),
+  sig: z.string(),
+});
+
+export type NostrEvent = z.infer<typeof NostrEventSchema>;
