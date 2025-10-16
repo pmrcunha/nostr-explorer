@@ -2,9 +2,15 @@ import queries from "./app/queries";
 import relays from "./app/relays";
 import { Cron, scheduledJobs } from "croner";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { logger } from "hono/logger";
 import { Scalar } from "@scalar/hono-api-reference";
 
+import { convertNpub } from "@pmrcunha/nostr";
+
+console.log(convertNpub("bum"));
+
 const app = new OpenAPIHono();
+app.use(logger());
 
 const job = new Cron(
   "*/5 * * * * *",
