@@ -12,7 +12,7 @@
 - [ ] Make function to fetch relay information
 - [ ] Write CRUD endpoints for queries
 - [x] Test using Effect to run Cron jobs
-- [ ] Remove Effect - use croner instead for cron jobs
+- [x] Remove Effect - use croner instead for cron jobs
 - [ ] Read queries from database and setup Cron job based on them
 - [ ] Write functions to download all NIPs from Github and store them in Meilisearch
 - [ ] Write function to extract kinds list from NIPs README
