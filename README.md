@@ -4,25 +4,20 @@
 
 ```mermaid
 architecture-beta
-    group nostr(database)[NOSTR]
+    group nostr(internet)[NOSTR]
     group backend(cloud)[BACKEND]
-    group frontend(disk)[FRONTEND]
+    group frontend(internet)[FRONTEND]
 
-    service relay1(cloud)[RELAY] in nostr
-    service relay2(cloud)[RELAY] in nostr
-    service relay3(cloud)[RELAY] in nostr
+    service relays(internet)[RELAY] in nostr
     service client(internet)[UI] in frontend
     service db(database)[SQLite] in backend
-    service meili(disk)[Meilisearch] in backend
+    service meili(database)[Meilisearch] in backend
     service server(server)[NOSTR Service] in backend
 
     db:L <--> R:server
-    meili:R <-- L:server
+    meili:R <--> L:server
     client:T <--> B:server
-    client:T <-- B:meili
-    relay1:B --> T:server
-    relay2:B --> T:server
-    relay3:B --> T:server
+    relays:B --> T:server
 ```
 
 ## Commands for testing
