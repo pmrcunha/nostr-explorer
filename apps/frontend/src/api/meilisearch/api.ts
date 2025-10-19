@@ -11,12 +11,14 @@ export async function searchEvents(
     q: query,
   };
   const validBody = searchEventsBodySchema.safeParse(body);
+  const meilisearchToken = localStorage.getItem("meilisearch_token");
+  if (!meilisearchToken) throw Error("Missing token to call meilisearch");
   if (!validBody.success) throw Error("Invalid payload for search endpoint");
   const response = await fetch("http://localhost:7700/indexes/events/search", {
     method: "POST",
     body: JSON.stringify(validBody.data),
     headers: {
-      Authorization: `Bearer meilisearch_token`,
+      Authorization: `Bearer ${meilisearchToken}`,
       "Content-Type": "application/json",
     },
   });
