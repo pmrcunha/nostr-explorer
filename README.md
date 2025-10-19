@@ -7,8 +7,7 @@ index them in a search engine, and provide a UI to search and preview them. The 
 to be used as a nostr client (I don't intend to host it publically), but to be run in a 
 home server and used as a developer or personal tool.
 
-<img width="3804" height="1722" alt="nostr-explorer" src="https://github.com/user-attachments/assets/d25e4f70-35c0-4277-ada7-d96da0b97db7" />
-
+![nostr-explorer](https://github.com/user-attachments/assets/d25e4f70-35c0-4277-ada7-d96da0b97db7)
 _Very much a work in progress screenshot..._
 
 ## Usage
