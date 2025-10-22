@@ -9,7 +9,9 @@
     "@hono/zod-validator": "^0.7.4",
     "@pmrcunha/nostr": "workspace:*",
     "@scalar/hono-api-reference": "^0.9.22",
+    "better-sqlite3": "^12.4.1",
     "croner": "^9.1.0",
+    "dotenv": "^17.2.3",
     "hono": "^4.9.12",
     "hono-openapi": "^1.1.0",
     "zod": "^4.1.12"

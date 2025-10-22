@@ -4,6 +4,7 @@ import queries from "./app/queries";
 import { Cron, scheduledJobs } from "croner";
 import { logger } from "hono/logger";
 import { Scalar } from "@scalar/hono-api-reference";
+import "dotenv/config";
 
 const app = new Hono();
 app.use(logger());
