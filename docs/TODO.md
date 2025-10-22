@@ -6,8 +6,8 @@
 - [ ] Get rid of the relays page
 - [ ] Change link to queries page to be a settings button in the right side
 - [ ] Setup mock UI for queries/settings page
-- [ ] Setup SQLite
-- [ ] Setup Drizzle
+- [x] Setup SQLite
+- [x] Setup Drizzle
 - [ ] Write CRUD endpoints for queries
 
 ## Search Engine
