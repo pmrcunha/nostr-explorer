@@ -2,8 +2,8 @@
 
 ## Setup and Scaffold
 - [ ] Cleanup the existing code
-- [ ] Delete settings button from sidebar
-- [ ] Get rid of the relays page
+- [x] Delete settings button from sidebar
+- [x] Get rid of the relays page
 - [ ] Change link to queries page to be a settings button in the right side
 - [ ] Setup mock UI for queries/settings page
 - [x] Setup SQLite
@@ -30,7 +30,7 @@
 - [ ] Make function to fetch npub metadata
 
 ## Frontend
-- [ ] Turn left panel into a fixed sidebar
+- [x] Turn left panel into a fixed sidebar
 - [ ] Setup CRUD operations for queries
 - [ ] Setup API calls for search and filtering
 - [ ] Make filter as you type search box with inline filters
