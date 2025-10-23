@@ -1,4 +1,4 @@
-import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
 
 export const queries = sqliteTable("queries", {
@@ -6,10 +6,14 @@ export const queries = sqliteTable("queries", {
   label: text().notNull(),
   schedule: text().notNull(),
   filter: text().notNull(),
+  relayId: int(),
 });
 
-export const queriesRelations = relations(queries, ({ many }) => ({
-  queriesToRelays: many(queriesToRelays),
+export const queriesRelations = relations(queries, ({ one }) => ({
+  relay: one(relays, {
+    fields: [queries.relayId],
+    references: [relays.id],
+  }),
 }));
 
 export const relays = sqliteTable("relays", {
@@ -19,32 +23,5 @@ export const relays = sqliteTable("relays", {
 });
 
 export const relaysRelations = relations(relays, ({ many }) => ({
-  queriesToRelays: many(queriesToRelays),
+  queries: many(queries),
 }));
-
-export const queriesToRelays = sqliteTable(
-  "queries_to_relays",
-  () => ({
-    relayId: int("relay_id")
-      .notNull()
-      .references(() => relays.id),
-    queryId: int("query_id")
-      .notNull()
-      .references(() => queries.id),
-  }),
-  (t) => [primaryKey({ columns: [t.relayId, t.queryId] })],
-);
-
-export const queriesToRelaysRelations = relations(
-  queriesToRelays,
-  ({ one }) => ({
-    queries: one(queries, {
-      fields: [queriesToRelays.queryId],
-      references: [queries.id],
-    }),
-    relays: one(relays, {
-      fields: [queriesToRelays.relayId],
-      references: [relays.id],
-    }),
-  }),
-);

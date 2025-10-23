@@ -1,6 +1,8 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { openAPIRouteHandler } from "hono-openapi";
 import queries from "./app/queries";
+import relays from "./app/relays";
 import { Cron, scheduledJobs } from "croner";
 import { logger } from "hono/logger";
 import { Scalar } from "@scalar/hono-api-reference";
@@ -8,6 +10,7 @@ import "dotenv/config";
 
 const app = new Hono();
 app.use(logger());
+app.use(cors());
 
 const job = new Cron(
   "*/5 * * * * *",
@@ -59,5 +62,6 @@ app.get("/", (c) => {
 });
 
 app.route("queries", queries);
+app.route("relays", relays);
 
 export default app;
