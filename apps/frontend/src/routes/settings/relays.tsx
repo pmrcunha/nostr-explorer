@@ -28,6 +28,13 @@ function RouteComponent() {
     }
   })
 
+  const deleteRelayMutation = useMutation({
+    mutationFn: async (relayId: number) => {
+      const response = await fetch(`${BASE_URL}/relays/${relayId}`, { method: 'DELETE' })
+      return response.json()
+    }
+  })
+
   if (isError) console.error(error)
 
   return <div className="p-4">
@@ -42,7 +49,9 @@ function RouteComponent() {
       </div>
     </form>
 
-    <ul>{relays.map((relay: { id: number; url: string }) => <li key={relay.id}>{relay.url}</li>)}</ul>
+    <ul>{relays.map((relay: { id: number; url: string }) => <li key={relay.id} onClick={() => {
+      deleteRelayMutation.mutate(relay.id)
+    }}>{relay.url}</li>)}</ul>
 
 
   </div>

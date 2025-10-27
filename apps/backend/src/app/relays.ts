@@ -3,6 +3,7 @@ import { describeRoute } from "hono-openapi";
 // import { resolver } from "hono-openapi/zod";
 import { db } from "../db";
 import { relays } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 const app = new Hono();
 
@@ -37,6 +38,20 @@ app.post(
   async (c) => {
     const relay = await c.req.text();
     const result = await db.insert(relays).values({ url: relay, label: "" });
+    return c.json({ success: true, result });
+  },
+);
+
+app.delete(
+  "/:id",
+  describeRoute({
+    summary: "Delete a relay",
+    description: "Deletes a relay from the database",
+    tags: ["Relays"],
+  }),
+  async (c) => {
+    const relayId = parseInt(c.req.param("id"));
+    const result = await db.delete(relays).where(eq(relays.id, relayId));
     return c.json({ success: true, result });
   },
 );
